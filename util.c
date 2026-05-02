@@ -2,14 +2,28 @@
 #include <string.h>
 #include <stdio.h>
 
-void move(Game*, int, char);
-char place(Game*, int);
+// Utility
 
-void init_game(Game *g, char p, char o) {
+void move(Game *g, int pos) {
+    g->board[(pos - 1) / SIZE][(pos - 1) % SIZE] = g->current;
+    g->current = (g->current == g->player) ? g->opponent : g->player;
+}
+
+char place(Game *g, int pos) {
+    return g->board[(pos - 1) / SIZE][(pos - 1) % SIZE];
+}
+
+// Game logic
+
+void init_game(Game *g, char p, char* diff) {
     memset(g->board, ' ', sizeof(g->board));
 
-    g->opponent = o;
     g->player = p;
+    g->current = p;
+
+    g->opponent = (g->player == 'X') ? 'O' : 'X';
+
+    g->difficulty = diff;
 }
 
 void draw_board(Game *g) {
@@ -21,18 +35,10 @@ void draw_board(Game *g) {
     }
 }
 
-void move(Game *g, int pos, char ch) {
-    g->board[(pos - 1) / SIZE][(pos - 1) % SIZE] = ch;
-}
-
-char place(Game *g, int pos) {
-    return g->board[(pos - 1) / SIZE][(pos - 1) % SIZE];
-}
-
 void player_move(Game *g) {
     int temp;
     
-    printf("Enter a position (1-9) : ");
+    printf("Enter a position to move for %c (1-9) : ", g->current);
     while(1) {
         scanf("%d",&temp);
         
@@ -46,7 +52,14 @@ void player_move(Game *g) {
             }
         }
 
-        move(g, temp, g->player);
+        move(g, temp);
         break;
+    }
+}
+
+void opponent_move(Game *g) {
+    if(!strcmp(g->difficulty, "-t")) {
+        draw_board(g);
+        player_move(g);
     }
 }

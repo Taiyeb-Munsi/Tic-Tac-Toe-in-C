@@ -5,7 +5,7 @@ int main() {
     char p = 'X';
     char o = 'O';
 
-    init_game(&g, p, o);
+    init_game(&g, p, "-t");
 
     while(1) {
         draw_board(&g);
