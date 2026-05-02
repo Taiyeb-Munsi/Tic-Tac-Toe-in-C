@@ -1,16 +1,19 @@
 #include "util.h"
+#include <time.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
 // Utility
 
-void move(Game *g, int pos) {
-    g->board[(pos - 1) / SIZE][(pos - 1) % SIZE] = g->current;
-    g->current = (g->current == g->player) ? g->opponent : g->player;
-}
-
-char place(Game *g, int pos) {
-    return g->board[(pos - 1) / SIZE][(pos - 1) % SIZE];
+int move(Game *g, int pos) {
+    if(g->board[(pos - 1) / SIZE][(pos - 1) % SIZE] != ' ')
+        return 0;
+    else {
+        g->board[(pos - 1) / SIZE][(pos - 1) % SIZE] = g->current;
+        g->current = (g->current == g->player) ? g->opponent : g->player;
+        return 1;
+    }
 }
 
 int check_win(Game *g, char a) {
@@ -33,6 +36,13 @@ int check_win(Game *g, char a) {
     return 0;
 }
 
+void ai_easy(Game* g) {
+    int temp = rand() % 9 + 1;
+    while(!move(g, temp)) {
+        temp = rand() % 9 + 1;
+    }
+}
+
 // Game logic
 
 void init_game(Game *g, char p, char* diff) {
@@ -44,6 +54,8 @@ void init_game(Game *g, char p, char* diff) {
     g->opponent = (g->player == 'X') ? 'O' : 'X';
 
     g->difficulty = diff;
+
+    srand(time(NULL));
 }
 
 void draw_board(Game *g) {
@@ -65,14 +77,13 @@ void player_move(Game *g) {
             printf("Invalid input, enter again : ");
             continue;
         } else {
-            if (place(g, temp)  != ' ') {
-                printf("Occupied, enter again : ");
+            if(!move(g, temp)) {
+                printf("Occupied, try again : ");
                 continue;
+            } else {
+                break;
             }
         }
-
-        move(g, temp);
-        break;
     }
 }
 
@@ -80,6 +91,8 @@ void opponent_move(Game *g) {
     if(!strcmp(g->difficulty, "-t")) {
         draw_board(g);
         player_move(g);
+    } else if(!strcmp(g->difficulty, "-e")) {
+        ai_easy(g);
     }
 }
 
