@@ -13,6 +13,26 @@ char place(Game *g, int pos) {
     return g->board[(pos - 1) / SIZE][(pos - 1) % SIZE];
 }
 
+int check_win(Game *g, char a) {
+    for(int i=0;i<SIZE;++i) {
+        if((g->board[i][0] == a && g->board[i][1] == a && g->board[i][2] == a) ||
+            (g->board[0][i] == a && g->board[1][i] == a && g->board[2][i] == a)) {
+            draw_board(g);
+            printf("%c WON\n", a);
+            return 1;
+        }
+    }
+
+    if((g->board[0][0] == a && g->board[1][1] == a && g->board[2][2] == a) ||
+        (g->board[0][2] == a && g->board[1][1] == a && g->board[2][0] == a)) {
+        draw_board(g);
+        printf("%c WON\n", a);
+        return 1;
+    }
+
+    return 0;
+}
+
 // Game logic
 
 void init_game(Game *g, char p, char* diff) {
@@ -28,10 +48,9 @@ void init_game(Game *g, char p, char* diff) {
 
 void draw_board(Game *g) {
     for(int i=0;i<SIZE;++i) {
-        for(int j=0;j<SIZE;++j) {
-            printf(" %c ", g->board[i][j]);
-        }
-        printf("\n");
+        printf(" %c | %c | %c \n", g->board[i][0], g->board[i][1], g->board[i][2]);
+        if(i < SIZE - 1)
+            printf("---|---|---\n");
     }
 }
 
@@ -62,4 +81,33 @@ void opponent_move(Game *g) {
         draw_board(g);
         player_move(g);
     }
+}
+
+int check_board(Game *g) {
+    int flag = 1;
+
+    if(check_win(g, g->player)) {
+        return 0;
+    }
+
+    if(check_win(g, g->opponent)) {
+        return 0;
+    }
+
+    for(int i=0;i<SIZE;++i) {
+        for(int j=0;j<SIZE;++j) {
+            if(g->board[i][j] == ' ') {
+                flag = 0;
+                break;
+            }
+        }
+    }
+
+    if(flag) {
+        draw_board(g);
+        printf("It's a draw\n");
+        return 0;
+    }
+
+    return 1;
 }

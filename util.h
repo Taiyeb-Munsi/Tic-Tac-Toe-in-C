@@ -16,5 +16,6 @@ void init_game(Game*, char, char*);
 void draw_board(Game*);
 void player_move(Game*);
 void opponent_move(Game*);
+int check_board(Game*);
 
 #endif
