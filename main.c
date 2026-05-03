@@ -4,7 +4,7 @@
 int main() {
     Game g;
     char p = 'X';
-    char* temp_test = "-e";
+    char* temp_test = "-m";
     Difficulty d;
 
     if(!strcmp(temp_test, "-t")) {
