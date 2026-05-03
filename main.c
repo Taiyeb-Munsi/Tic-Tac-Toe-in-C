@@ -1,21 +1,32 @@
 #include "util.h"
-#include <string.h>
+#include <unistd.h>
 
-int main() {
+int main(int argc, char* argv[]) {
     Game g;
     char p = 'X';
-    char* temp_test = "-m";
-    Difficulty d;
+    Difficulty d = MEDIUM;
 
-    if(!strcmp(temp_test, "-t")) {
-        d = TWO_PLAYER;
-    } else if(!strcmp(temp_test, "-e")) {
-        d = EASY;
-    } else if(!strcmp(temp_test, "-m")) {
-        d = MEDIUM;
-    } else if(!strcmp(temp_test, "-h")) {
-        d = HARD;
+    int opt;
+    while((opt = getopt(argc, argv, "temh")) != -1) {
+        switch (opt) {
+            case 't' :
+                d = TWO_PLAYER;
+                break;
+            case 'e':
+                d = EASY;
+                break;
+            case 'm':
+                d = MEDIUM;
+                break;
+            case 'h':
+                d = HARD;
+        }
     }
+
+    if (optind < argc) {
+        p = argv[optind][0];
+    }
+    
 
     init_game(&g, p, d);
 
