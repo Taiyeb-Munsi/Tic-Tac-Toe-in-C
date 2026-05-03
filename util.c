@@ -71,7 +71,11 @@ void player_move(Game *g) {
     
     printf("Enter a position to move for %c (1-9) : ", g->current);
     while(1) {
-        scanf("%d",&temp);
+        if(scanf("%d", &temp) != 1) {
+            printf("Invalid input, enter again : ");
+            while(getchar() != '\n');
+            continue;
+        }
         
         if(temp < 1 || temp > 9) {
             printf("Invalid input, enter again : ");
