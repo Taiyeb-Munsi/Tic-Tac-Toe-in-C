@@ -45,7 +45,7 @@ void ai_easy(Game* g) {
 
 // Game logic
 
-void init_game(Game *g, char p, char* diff) {
+void init_game(Game *g, char p, Difficulty diff) {
     memset(g->board, ' ', sizeof(g->board));
 
     g->player = p;
@@ -88,10 +88,10 @@ void player_move(Game *g) {
 }
 
 void opponent_move(Game *g) {
-    if(!strcmp(g->difficulty, "-t")) {
+    if(g->difficulty == TWO_PLAYER) {
         draw_board(g);
         player_move(g);
-    } else if(!strcmp(g->difficulty, "-e")) {
+    } else if(g->difficulty == EASY) {
         ai_easy(g);
     }
 }

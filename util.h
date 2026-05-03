@@ -4,15 +4,17 @@
 
 // Game objects
 
+typedef enum { TWO_PLAYER, EASY, MEDIUM, HARD } Difficulty;
+
 typedef struct {
     char board[SIZE][SIZE];
     char player, opponent, current;
-    char* difficulty;
+    Difficulty difficulty;
 } Game;
 
 // Function declarations
 
-void init_game(Game*, char, char*);
+void init_game(Game*, char, Difficulty);
 void draw_board(Game*);
 void player_move(Game*);
 void opponent_move(Game*);
