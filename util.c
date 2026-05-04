@@ -36,7 +36,7 @@ int check_win(Game *g, char a) {
 
 void ai_easy(Game* g) {
     int temp = rand() % 9 + 1;
-    while(!move(g, temp, g->opponent)) {
+    while(!move(g, temp, g->current)) {
         temp = rand() % 9 + 1;
     }
 }
@@ -77,6 +77,7 @@ void init_game(Game *g, char p, Difficulty diff) {
 }
 
 void draw_board(Game *g) {
+    printf("\n");
     for(int i=0;i<SIZE;++i) {
         printf(" %c | %c | %c \n", g->board[i][0], g->board[i][1], g->board[i][2]);
         if(i < SIZE - 1)
