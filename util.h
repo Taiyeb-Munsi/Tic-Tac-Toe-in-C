@@ -1,23 +1,10 @@
 #ifndef UTIL_H
 #define UTIL_H
-#define SIZE 3
 
-// Game objects
+#include "game.h"
 
-typedef enum { TWO_PLAYER, EASY, MEDIUM, HARD } Difficulty;
-
-typedef struct {
-    char board[SIZE][SIZE];
-    char player, opponent, current;
-    Difficulty difficulty;
-} Game;
-
-// Function declarations
-
-void init_game(Game*, char, Difficulty);
-void draw_board(Game*);
-void player_move(Game*);
-void opponent_move(Game*);
-int check_board(Game*);
+int move(Game*, int, char);
+int check_win(Game*, char);
+int check_draw(Game*);
 
 #endif
