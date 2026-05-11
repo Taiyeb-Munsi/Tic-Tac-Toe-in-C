@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 
     while(1) {
         draw_board(&g);
-        player_move(&g);
+        player_move(&g, g.player);
         if(!check_board(&g)) break;
         opponent_move(&g);
         if(!check_board(&g)) break;

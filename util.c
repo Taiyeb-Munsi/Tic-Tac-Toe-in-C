@@ -6,7 +6,6 @@ int move(Game *g, int pos, char p) {
         return 0;
     else {
         g->board[(pos - 1) / SIZE][(pos - 1) % SIZE] = p;
-        g->current = (g->current == g->player) ? g->opponent : g->player;
         return 1;
     }
 }
@@ -32,7 +31,6 @@ int check_draw(Game *g) {
         for(int j=0;j<SIZE;++j) {
             if(g->board[i][j] == ' ') {
                 return 0;
-                break;
             }
         }
     }

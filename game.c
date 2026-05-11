@@ -1,5 +1,6 @@
 #include "game.h"
 #include "util.h"
+#include "ai.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -8,32 +9,6 @@
 
 // Ai functions
 
-void ai_easy(Game* g) {
-    int temp = rand() % 9 + 1;
-    while(!move(g, temp, g->current)) {
-        temp = rand() % 9 + 1;
-    }
-}
-
-void ai_medium(Game* g) {
-    for(int i=1;i<=SIZE*SIZE;++i) {
-        Game copy = *g;
-        if(move(&copy, i, g->opponent) && check_win(&copy, g->opponent)) {
-            move(g, i, g->current);
-            return;
-        }
-    }
-
-    for(int i=1;i<=SIZE*SIZE;++i) {
-        Game copy = *g;
-        if(move(&copy, i, g->player) && check_win(&copy, g->player)) {
-            move(g, i, g->current);
-            return;
-        }
-    }
-
-    ai_easy(g);
-}
 
 // Game logic
 
@@ -41,7 +16,6 @@ void init_game(Game *g, char p, Difficulty diff) {
     memset(g->board, ' ', sizeof(g->board));
 
     g->player = p;
-    g->current = p;
 
     g->opponent = (g->player == 'X') ? 'O' : 'X';
 
@@ -59,10 +33,10 @@ void draw_board(Game *g) {
     }
 }
 
-void player_move(Game *g) {
+void player_move(Game *g, char p) {
     int temp;
     
-    printf("Enter a position to move for %c (1-9) : ", g->current);
+    printf("Enter a position to move for %c (1-9) : ", p);
     while(1) {
         if(scanf("%d", &temp) != 1) {
             printf("Invalid input, enter again : ");
@@ -74,7 +48,7 @@ void player_move(Game *g) {
             printf("Invalid input, enter again : ");
             continue;
         } else {
-            if(!move(g, temp, g->current)) {
+            if(!move(g, temp, g->player)) {
                 printf("Occupied, try again : ");
                 continue;
             } else {
@@ -87,7 +61,7 @@ void player_move(Game *g) {
 void opponent_move(Game *g) {
     if(g->difficulty == TWO_PLAYER) {
         draw_board(g);
-        player_move(g);
+        player_move(g, g->opponent);
     } else if(g->difficulty == EASY) {
         ai_easy(g);
     } else if(g->difficulty == MEDIUM) {
